@@ -17,7 +17,7 @@ def login():
     if form.validate_on_submit():
         # апроверкп вхрда
 
-        return redirect('/index')
+        return redirect(url_for('index'))
     return render_template('singin.html', form=form)
 
 @app.route('/index')
