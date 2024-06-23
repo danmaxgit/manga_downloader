@@ -1,14 +1,13 @@
 # Flask modules
-from flask               import render_template, request, url_for, redirect, send_from_directory, flash
-from flask_login         import login_user, logout_user, current_user, login_required
-from werkzeug.exceptions import HTTPException, NotFound, abort
-from jinja2              import TemplateNotFound
-from werkzeug.security   import generate_password_hash, check_password_hash
+from flask               import render_template, request, url_for, redirect, jsonify
+from flask_login         import login_user, login_required
 
 # App modules
-from app        import app, db, lm, bcrypt
+from app        import app, lm, bcrypt
 from app.models import User
-from app.forms  import LoginForm, RegisterForm
+from app.forms  import LoginForm
+
+import requests
 
 @lm.user_loader
 def load_user(user_id):
@@ -29,6 +28,21 @@ def login():
                 return redirect(url_for('index'))
     return render_template('singin.html', form=form)
 
+@login_required
 @app.route('/index')
 def index():
     return render_template('grid.html')
+
+@login_required
+@app.route('/api', methods=['GET'])
+def search():
+    user_agents = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+    st_accept = "text/html"
+    headers = {
+        "Accept": st_accept,
+        "User-Agent": user_agents
+    }
+
+    resp = requests.get('https://mangalib.me/', headers)#add here selenium
+    if resp.status_code == 200:
+        return jsonify({"a":"b"})

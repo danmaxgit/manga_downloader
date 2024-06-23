@@ -12,8 +12,6 @@ app = Flask(__name__)
 app.config.from_object('app.config.Config')
 
 db = SQLAlchemy(app) # flask-sqlalchemy
-with app.app_context():
-    db.create_all()
 
 bcrypt = Bcrypt(app)
 
